@@ -18,7 +18,7 @@ function getTeachers(req, res){
 		// }); 
 
 		
-	    //Of gebruik deze verkorte versie. Waar moet hier de populate komen?
+	    //Of gebruik deze verkorte versie. De populate ontbreekt nog. Waar moet deze komen te staan?
         Teacher.find(query).then((data)=>{res.json(data)})
 
 
