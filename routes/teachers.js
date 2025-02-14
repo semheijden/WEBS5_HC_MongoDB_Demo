@@ -6,38 +6,27 @@ var mongoose = require('mongoose');
 var Teacher = mongoose.model('Teacher');
 var Course = mongoose.model('Course');
 
-function getTeachers(req, res){
-	var query = { };
-
-		//Alternatief
-		// var result = Teacher.find(query);
-		// 
-		// result.exec((err, data) => {
-		// 	if(err){console.log('err.message: '+err.message)}
-		// 	res.json(data);
-		// }); 
-
-		
-	    //Of gebruik deze verkorte versie. De populate ontbreekt nog. Waar moet deze komen te staan?
-        Teacher.find(query).then((data)=>{res.json(data)})
-
-
+async function getTeachers(req, res){
+    try {
+        const teachers = await Teacher.find();
+        res.status(200).json(teachers);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching teachers', error: error.message });
+    }
 }
 
-function addTeacher(req, res){
+function addTeacher(req, res) {
     var teacher = new Teacher(req.body);
     console.log(req.body);
-	teacher
-		.save()
-		.then(savedTeacher => {
-			res.status(201);
-			res.json(savedTeacher);
-		})
-		.fail(err => {
-			res.status(500);
-			console.log(err);
-			res.json(err.errors);
-		});
+    teacher
+        .save()
+        .then(savedTeacher => {
+            res.status(201).json(savedTeacher)
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: err.message })
+        });
 }
 
 // Routing
